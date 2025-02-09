@@ -4,7 +4,7 @@ from llama_index.core.settings import Settings
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # Initialize LlamaIndex embedding model
 embedding_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
@@ -198,7 +198,7 @@ def add_to_file():
         return jsonify({"message": "⚠ Failed to add text to the file."}), 500
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     # Load data from the file
     data_text = load_text_file("data/data.txt")
     last_location = None  # Initialize last location as a global variable
