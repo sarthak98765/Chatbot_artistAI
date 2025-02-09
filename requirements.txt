@@ -1,4 +1,6 @@
-flask
+Flask
 requests
 llama-index
-gunicorn
+llama-index-embeddings-huggingface
+transformers
+torch
