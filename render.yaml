@@ -1,0 +1,11 @@
+services:
+  - name: flask-chatbot
+    type: web
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -w 1 -b 0.0.0.0:5000 server:app"
+    envVars:
+      - key: "PYTHON_VERSION"
+        value: "3.9"
+    autoDeploy: true

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game AI Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        #chatbox {
+            width: 60%;
+            margin: auto;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            padding: 10px;
+            background-color: #222;
+            border-radius: 10px;
+        }
+        .user, .bot {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .user {
+            background-color: #0056b3;
+            text-align: right;
+        }
+        .bot {
+            background-color: #333;
+            text-align: left;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        #add-section {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Game AI Chatbot</h1>
+    <div id="chatbox"></div>
+
+    <input type="text" id="user_input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+    <button onclick="toggleAddSection()">ADD</button>
+
+    <div id="add-section">
+        <textarea id="add_text" rows="4" cols="50" placeholder="Enter your text here..."></textarea><br>
+        <button onclick="addToFile()">Add to File</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let userMessage = $("#user_input").val().trim();
+            if (userMessage === "") return;
+
+            $("#chatbox").append(`<div class='user'>You: ${userMessage}</div>`);
+            $("#user_input").val("");  // Clear input
+
+            $.ajax({
+                type: "POST",
+                url: "/chat",
+                contentType: "application/json",
+                data: JSON.stringify({ message: userMessage }),
+                success: function(response) {
+                    // Convert \n into <br> for new lines
+                    let botResponse = response.response.replace(/\n/g, "<br>");
+                    $("#chatbox").append(`<div class='bot'>🤖: ${botResponse}</div>`);
+                    $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);  // Auto-scroll
+                },
+                error: function() {
+                    $("#chatbox").append(`<div class='bot'>⚠️ Error contacting server.</div>`);
+                }
+            });
+        }
+
+        function toggleAddSection() {
+            $("#add-section").toggle(); // Show/hide the add section
+        }
+
+        function addToFile() {
+            let textToAdd = $("#add_text").val().trim();
+            if (textToAdd === "") {
+                alert("⚠️ Please enter some text to add.");
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/add-to-file",
+                contentType: "application/json",
+                data: JSON.stringify({ text: textToAdd }),
+                success: function(response) {
+                    alert(response.message); // Show success message
+                    $("#add_text").val(""); // Clear text area
+                    $("#add-section").hide(); // Hide the add section
+                },
+                error: function() {
+                    alert("⚠️ Error adding text to file.");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

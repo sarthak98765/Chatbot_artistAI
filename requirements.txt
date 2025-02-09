@@ -1,0 +1,4 @@
+flask
+requests
+llama-index
+gunicorn
