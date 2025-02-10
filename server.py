@@ -3,6 +3,7 @@ import requests
 from llama_index.core.settings import Settings
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, ServiceContext
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+import os
 
 app = Flask(__name__)
 
@@ -202,4 +203,5 @@ if __name__ == "__main__":
     # Load data from the file
     data_text = load_text_file("data/data.txt")
     last_location = None  # Initialize last location as a global variable
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use Render-assigned port
+    app.run(host="0.0.0.0", port=port, debug=True)
