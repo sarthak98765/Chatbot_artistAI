@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 
 # Initialize LlamaIndex embedding model
-embedding_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
+embedding_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L12-v1")
 Settings.embed_model = embedding_model
 # Load and index documents from the 'data/' directory
 def load_and_index_documents(directory="data"):
@@ -204,4 +204,4 @@ if __name__ == "__main__":
     data_text = load_text_file("data/data.txt")
     last_location = None  # Initialize last location as a global variable
     port = int(os.environ.get("PORT", 5000))  # Use Render-assigned port
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=False)
